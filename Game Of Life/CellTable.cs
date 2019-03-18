@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using Newtonsoft.Json;
 
 namespace Game_Of_Life
 {
@@ -35,6 +33,28 @@ namespace Game_Of_Life
                 }
 
                 timer.Interval = _RefreshRateInMilliseconds;
+            }
+        }
+
+        public string PatternCsv
+        {
+            get
+            {
+                var rows = new string[CellNumber];
+
+                for (int rowNumber = 0; rowNumber < CellNumber; rowNumber++)
+                {
+                    var row = new int[CellNumber];
+
+                    for (int columnNumber = 0; columnNumber < CellNumber; columnNumber++)
+                    {
+                        row[columnNumber] = Cells[rowNumber, columnNumber].Alive ? 1 : 0;
+                    }
+
+                    rows[rowNumber] = string.Join(Constants.PatternCsvSeparator.ToString(), row);
+                }
+
+                return string.Join(Environment.NewLine, rows);
             }
         }
 
@@ -74,7 +94,7 @@ namespace Game_Of_Life
         {
             var cellNumber = Math.Sqrt(pattern.LongLength);
 
-            if (pattern.Length < Constants.MinimumCellNumber || pattern.Length > Constants.MaximumCellNumber)
+            if (cellNumber < Constants.MinimumCellNumber || cellNumber > Constants.MaximumCellNumber)
             {
                 throw new Exception();
             }
@@ -185,25 +205,6 @@ namespace Game_Of_Life
         {
             SimulationRunning = false;
             timer.Stop();
-        }
-
-        public string GetPatternCsv()
-        {
-            var rows = new string[CellNumber];
-
-            for (int rowNumber = 0; rowNumber < CellNumber; rowNumber++)
-            {
-                var row = new int[CellNumber];
-
-                for (int columnNumber = 0; columnNumber < CellNumber; columnNumber++)
-                {
-                    row[columnNumber] = Cells[rowNumber, columnNumber].Alive ? 1 : 0;
-                }
-
-                rows[rowNumber] = string.Join(Constants.PatternCsvSeparator.ToString(), row);
-            }
-
-            return string.Join(Environment.NewLine, rows);
         }
 
         private void Timer_Tick(object sender, EventArgs e)

@@ -36,7 +36,7 @@
             this.labelCellNumber = new System.Windows.Forms.Label();
             this.buttonRandomizePattern = new System.Windows.Forms.Button();
             this.numericUpDownRefreshRate = new System.Windows.Forms.NumericUpDown();
-            this.label1 = new System.Windows.Forms.Label();
+            this.labelRefreshRate = new System.Windows.Forms.Label();
             this.buttonSetRefreshRate = new System.Windows.Forms.Button();
             this.buttonSavePattern = new System.Windows.Forms.Button();
             this.buttonLoadPattern = new System.Windows.Forms.Button();
@@ -93,9 +93,9 @@
             this.labelCellNumber.AutoSize = true;
             this.labelCellNumber.Location = new System.Drawing.Point(1065, 151);
             this.labelCellNumber.Name = "labelCellNumber";
-            this.labelCellNumber.Size = new System.Drawing.Size(98, 13);
+            this.labelCellNumber.Size = new System.Drawing.Size(82, 13);
             this.labelCellNumber.TabIndex = 5;
-            this.labelCellNumber.Text = "Cell number (8 - 64)";
+            this.labelCellNumber.Text = "Info cell number";
             // 
             // buttonRandomizePattern
             // 
@@ -114,14 +114,14 @@
             this.numericUpDownRefreshRate.Size = new System.Drawing.Size(62, 20);
             this.numericUpDownRefreshRate.TabIndex = 7;
             // 
-            // label1
+            // labelRefreshRate
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(1218, 151);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(141, 13);
-            this.label1.TabIndex = 8;
-            this.label1.Text = "Refresh rate (100 - 1000 ms)";
+            this.labelRefreshRate.AutoSize = true;
+            this.labelRefreshRate.Location = new System.Drawing.Point(1218, 151);
+            this.labelRefreshRate.Name = "labelRefreshRate";
+            this.labelRefreshRate.Size = new System.Drawing.Size(81, 13);
+            this.labelRefreshRate.TabIndex = 8;
+            this.labelRefreshRate.Text = "Info refresh rate";
             // 
             // buttonSetRefreshRate
             // 
@@ -161,7 +161,7 @@
             this.Controls.Add(this.buttonLoadPattern);
             this.Controls.Add(this.buttonSavePattern);
             this.Controls.Add(this.buttonSetRefreshRate);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.labelRefreshRate);
             this.Controls.Add(this.numericUpDownRefreshRate);
             this.Controls.Add(this.buttonRandomizePattern);
             this.Controls.Add(this.labelCellNumber);
@@ -189,7 +189,7 @@
         private System.Windows.Forms.Label labelCellNumber;
         private System.Windows.Forms.Button buttonRandomizePattern;
         private System.Windows.Forms.NumericUpDown numericUpDownRefreshRate;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label labelRefreshRate;
         private System.Windows.Forms.Button buttonSetRefreshRate;
         private System.Windows.Forms.Button buttonSavePattern;
         private System.Windows.Forms.Button buttonLoadPattern;

@@ -1,10 +1,7 @@
 ﻿using System;
 using System.IO;
-using System.Web.Script.Serialization;
 using System.Windows.Forms;
 using Game_Of_Life;
-using Newtonsoft.Json;
-
 
 namespace GameOfLife
 {
@@ -22,13 +19,28 @@ namespace GameOfLife
             buttonSetRefreshRate.Enabled = false;
             buttonSavePattern.Enabled = false;
 
-            numericUpDownCellNumber.Value = Game_Of_Life.Constants.MinimumCellNumber;
-            numericUpDownCellNumber.Minimum = Game_Of_Life.Constants.MinimumCellNumber;
-            numericUpDownCellNumber.Maximum = Game_Of_Life.Constants.MaximumCellNumber;
+            SetupNumericUpDownCellNumber();
+            SetupNumericUpDownRefreshRate();
+        }
 
-            numericUpDownRefreshRate.Value = Game_Of_Life.Constants.MinimumRefreshRateInMilliseconds;
-            numericUpDownRefreshRate.Minimum = Game_Of_Life.Constants.MinimumRefreshRateInMilliseconds;
-            numericUpDownRefreshRate.Maximum = Game_Of_Life.Constants.MaximumRefreshRateInMilliseconds;
+        private void SetupNumericUpDownCellNumber()
+        {
+            const int minimumCellNumber = Game_Of_Life.Constants.MinimumCellNumber;
+            const int maximumCellNumber = Game_Of_Life.Constants.MaximumCellNumber;
+            labelCellNumber.Text = $"Cell number ({minimumCellNumber} - {maximumCellNumber})";
+            numericUpDownCellNumber.Value = minimumCellNumber;
+            numericUpDownCellNumber.Minimum = minimumCellNumber;
+            numericUpDownCellNumber.Maximum = maximumCellNumber;
+        }
+
+        private void SetupNumericUpDownRefreshRate()
+        {
+            const int minimumRefreshRate = Game_Of_Life.Constants.MinimumRefreshRateInMilliseconds;
+            const int maximumRefreshRate = Game_Of_Life.Constants.MaximumRefreshRateInMilliseconds;
+            labelRefreshRate.Text = $"Refresh rate in ms ({minimumRefreshRate} - {maximumRefreshRate})";
+            numericUpDownRefreshRate.Value = minimumRefreshRate;
+            numericUpDownRefreshRate.Minimum = minimumRefreshRate;
+            numericUpDownRefreshRate.Maximum = maximumRefreshRate;
         }
 
         private void buttonStartSimulation_Click(object sender, System.EventArgs e)
@@ -40,6 +52,8 @@ namespace GameOfLife
             buttonEndSimulation.Enabled = true;
             buttonRandomizePattern.Enabled = false;
             buttonSetRefreshRate.Enabled = false;
+            buttonSavePattern.Enabled = false;
+            buttonLoadPattern.Enabled = false;
         }
 
         private void buttonEndSimulation_Click(object sender, System.EventArgs e)
@@ -51,6 +65,8 @@ namespace GameOfLife
             buttonEndSimulation.Enabled = false;
             buttonRandomizePattern.Enabled = true;
             buttonSetRefreshRate.Enabled = true;
+            buttonSavePattern.Enabled = true;
+            buttonLoadPattern.Enabled = true;
         }
 
         private void buttonInitializeSimulation_Click(object sender, System.EventArgs e)
@@ -86,7 +102,7 @@ namespace GameOfLife
 
         private void buttonSavePattern_Click(object sender, System.EventArgs e)
         {
-            var patternCsv = cellTable.GetPatternCsv();
+            var patternCsv = cellTable.PatternCsv;
             var saveFileDialog = new SaveFileDialog
             {
                 Title = "Browse csv file",
