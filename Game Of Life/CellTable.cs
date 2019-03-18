@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 
@@ -10,7 +11,7 @@ namespace Game_Of_Life
         private Timer timer;
         private const int Resolution = 1024;
 
-        public bool SimulationRunning;
+        public bool SimulationRunning { get; private set; }
         public int CellNumber { get; }
         public int CellSize { get; }
         public Cell[,] Cells { get; private set; }
@@ -52,26 +53,33 @@ namespace Game_Of_Life
             RefreshRateInMilliseconds = Constants.MinimumRefreshRateInMilliseconds;
         }
 
-        public CellTable(bool[,] pattern)
+        public CellTable(int[,] pattern)
         {
-            ValidatePattern(pattern);
-
             InitializeComponent();
+
+            ValidatePattern(pattern);
+            CellNumber = pattern.GetLength(0);
+            CellSize = Resolution / CellNumber;
+
+            InitializeCells();
+            SetCellsAliveStatusFromPattern(pattern);
+
+            timer = new Timer();
+            timer.Tick += Timer_Tick;
+
+            RefreshRateInMilliseconds = Constants.MinimumRefreshRateInMilliseconds;
         }
 
-        private void ValidatePattern(bool[,] pattern)
+        private void ValidatePattern(int[,] pattern)
         {
+            var cellNumber = Math.Sqrt(pattern.LongLength);
+
             if (pattern.Length < Constants.MinimumCellNumber || pattern.Length > Constants.MaximumCellNumber)
             {
                 throw new Exception();
             }
 
-            if (pattern.Rank < Constants.MinimumCellNumber || pattern.Length > Constants.MaximumCellNumber)
-            {
-                throw new Exception();
-            }
-
-            if (pattern.Length != pattern.Rank)
+            if (cellNumber < Constants.MinimumCellNumber || cellNumber > Constants.MaximumCellNumber)
             {
                 throw new Exception();
             }
@@ -111,6 +119,25 @@ namespace Game_Of_Life
 
                     Cells[row, column] = cell;
                     cell.Alive = false;
+                }
+            }
+        }
+
+        private void SetCellsAliveStatusFromPattern(int[,] pattern)
+        {
+            for (int row = 0; row < CellNumber; row++)
+            {
+                for (int column = 0; column < CellNumber; column++)
+                {
+                    if (pattern[row, column] == Constants.PatternDeadValue)
+                    {
+                        Cells[row, column].Alive = false;
+                    }
+
+                    if (pattern[row, column] == Constants.PatternAliveValue)
+                    {
+                        Cells[row, column].Alive = true;
+                    }
                 }
             }
         }
@@ -160,18 +187,23 @@ namespace Game_Of_Life
             timer.Stop();
         }
 
-        public string GetPatternJson()
+        public string GetPatternCsv()
         {
-            var pattern = new bool[CellNumber, CellNumber];
-            for (int row = 0; row < CellNumber; row++)
+            var rows = new string[CellNumber];
+
+            for (int rowNumber = 0; rowNumber < CellNumber; rowNumber++)
             {
-                for (int column = 0; column < CellNumber; column++)
+                var row = new int[CellNumber];
+
+                for (int columnNumber = 0; columnNumber < CellNumber; columnNumber++)
                 {
-                    pattern[row, column] = Cells[row, column].Alive;
+                    row[columnNumber] = Cells[rowNumber, columnNumber].Alive ? 1 : 0;
                 }
+
+                rows[rowNumber] = string.Join(Constants.PatternCsvSeparator.ToString(), row);
             }
 
-            return JsonConvert.SerializeObject(pattern);
+            return string.Join(Environment.NewLine, rows);
         }
 
         private void Timer_Tick(object sender, EventArgs e)

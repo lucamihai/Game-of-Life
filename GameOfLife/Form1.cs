@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Web.Script.Serialization;
 using System.Windows.Forms;
 using Game_Of_Life;
@@ -85,24 +86,103 @@ namespace GameOfLife
 
         private void buttonSavePattern_Click(object sender, System.EventArgs e)
         {
-            var json = cellTable.GetPatternJson();
+            var patternCsv = cellTable.GetPatternCsv();
+            var saveFileDialog = new SaveFileDialog
+            {
+                Title = "Browse csv file",
+                DefaultExt = "csv",
+                Filter = "csv files (*.csv) | *.csv"
+            };
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                if (File.Exists(saveFileDialog.FileName))
+                {
+                    return;
+                }
+
+                var file = File.Create(saveFileDialog.FileName);
+                file.Close();
+
+                using (var streamWriter = new StreamWriter(saveFileDialog.FileName))
+                {
+                    streamWriter.Write(patternCsv);
+                }
+            }
         }
 
         private void buttonLoadPattern_Click(object sender, System.EventArgs e)
         {
-            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            using (var openFileDialog = new OpenFileDialog())
             {
+                openFileDialog.Title = "Browse csv file";
+                openFileDialog.DefaultExt = "csv";
+                openFileDialog.Filter = "csv files (*.csv) | *.csv";
+
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     var fileStream = openFileDialog.OpenFile();
 
-                    using (StreamReader reader = new StreamReader(fileStream))
+                    using (var streamReader = new StreamReader(fileStream))
                     {
-                        var contents = reader.ReadToEnd();
-                        var pattern = (bool[,])JsonConvert.DeserializeObject(contents);
+                        var csvString = streamReader.ReadToEnd();
+                        ValidatePatternCsvString(csvString);
+                        var pattern = GetPatternFromCsvString(csvString);
+
+                        cellTable = new CellTable(pattern);
+
+                        panelCellTable.Controls.Clear();
+                        panelCellTable.Controls.Add(cellTable);
+
+                        buttonStartSimulation.Enabled = true;
+                        buttonRandomizePattern.Enabled = true;
+                        buttonSetRefreshRate.Enabled = true;
+                        buttonSavePattern.Enabled = true;
                     }
                 }
             }
+        }
+
+        private void ValidatePatternCsvString(string csvString)
+        {
+            var rows = csvString.Split(
+                new[] { Environment.NewLine },
+                StringSplitOptions.None
+            );
+            var cellNumber = rows.Length;
+
+            foreach (var row in rows)
+            {
+                var columns = row.Split(Game_Of_Life.Constants.PatternCsvSeparator);
+                if (columns.Length != cellNumber)
+                {
+                    throw new Exception("Csv string is not valid. Number of rows should be equal to the number of columns for each row.");
+                }
+            }
+        }
+
+        private int[,] GetPatternFromCsvString(string csvString)
+        {
+            var rows = csvString.Split(
+                new[] { Environment.NewLine },
+                StringSplitOptions.None
+            );
+            var cellNumber = rows.Length;
+
+            var pattern = new int[cellNumber, cellNumber];
+
+            for (int rowNumber = 0; rowNumber < cellNumber; rowNumber++)
+            {
+                var row = rows[rowNumber];
+                var columns = row.Split(Game_Of_Life.Constants.PatternCsvSeparator);
+
+                for (int columnNumber = 0; columnNumber < cellNumber; columnNumber++)
+                {
+                    pattern[rowNumber, columnNumber] = Convert.ToInt32(columns[columnNumber]);
+                }
+            }
+
+            return pattern;
         }
     }
 }
