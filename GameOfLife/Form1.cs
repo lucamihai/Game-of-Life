@@ -1,7 +1,7 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Windows.Forms;
 using Game_Of_Life;
+using Newtonsoft.Json;
 
 namespace GameOfLife
 {
@@ -102,38 +102,39 @@ namespace GameOfLife
 
         private void buttonSavePattern_Click(object sender, System.EventArgs e)
         {
-            //var patternCsv = cellTable.PatternCsv;
-            //var saveFileDialog = new SaveFileDialog
-            //{
-            //    Title = "Browse csv file",
-            //    DefaultExt = "csv",
-            //    Filter = "csv files (*.csv) | *.csv"
-            //};
+            var jsonString = JsonConvert.SerializeObject(cellTable.Cells);
 
-            //if (saveFileDialog.ShowDialog() == DialogResult.OK)
-            //{
-            //    if (File.Exists(saveFileDialog.FileName))
-            //    {
-            //        return;
-            //    }
+            var saveFileDialog = new SaveFileDialog
+            {
+                Title = "Browse json file",
+                DefaultExt = "json",
+                Filter = "json files (*json) | *.json"
+            };
 
-            //    var file = File.Create(saveFileDialog.FileName);
-            //    file.Close();
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                if (File.Exists(saveFileDialog.FileName))
+                {
+                    return;
+                }
 
-            //    using (var streamWriter = new StreamWriter(saveFileDialog.FileName))
-            //    {
-            //        streamWriter.Write(patternCsv);
-            //    }
-            //}
+                var file = File.Create(saveFileDialog.FileName);
+                file.Close();
+
+                using (var streamWriter = new StreamWriter(saveFileDialog.FileName))
+                {
+                    streamWriter.Write(jsonString);
+                }
+            }
         }
 
         private void buttonLoadPattern_Click(object sender, System.EventArgs e)
         {
             using (var openFileDialog = new OpenFileDialog())
             {
-                openFileDialog.Title = "Browse csv file";
-                openFileDialog.DefaultExt = "csv";
-                openFileDialog.Filter = "csv files (*.csv) | *.csv";
+                openFileDialog.Title = "Browse json file";
+                openFileDialog.DefaultExt = "json";
+                openFileDialog.Filter = "json files (*.json) | *.json";
 
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
@@ -141,11 +142,10 @@ namespace GameOfLife
 
                     using (var streamReader = new StreamReader(fileStream))
                     {
-                        var csvString = streamReader.ReadToEnd();
-                        ValidatePatternCsvString(csvString);
-                        var pattern = GetPatternFromCsvString(csvString);
+                        var jsonString = streamReader.ReadToEnd();
+                        var result = JsonConvert.DeserializeObject<Cell[,]>(jsonString);
 
-                        cellTable = new CellTable(pattern);
+                        cellTable = new CellTable(result);
 
                         panelCellTable.Controls.Clear();
                         panelCellTable.Controls.Add(cellTable);
@@ -157,48 +157,6 @@ namespace GameOfLife
                     }
                 }
             }
-        }
-
-        private void ValidatePatternCsvString(string csvString)
-        {
-            var rows = csvString.Split(
-                new[] { Environment.NewLine },
-                StringSplitOptions.None
-            );
-            var cellNumber = rows.Length;
-
-            foreach (var row in rows)
-            {
-                var columns = row.Split(Game_Of_Life.Constants.PatternCsvSeparator);
-                if (columns.Length != cellNumber)
-                {
-                    throw new Exception("Csv string is not valid. Number of rows should be equal to the number of columns for each row.");
-                }
-            }
-        }
-
-        private int[,] GetPatternFromCsvString(string csvString)
-        {
-            var rows = csvString.Split(
-                new[] { Environment.NewLine },
-                StringSplitOptions.None
-            );
-            var cellNumber = rows.Length;
-
-            var pattern = new int[cellNumber, cellNumber];
-
-            for (int rowNumber = 0; rowNumber < cellNumber; rowNumber++)
-            {
-                var row = rows[rowNumber];
-                var columns = row.Split(Game_Of_Life.Constants.PatternCsvSeparator);
-
-                for (int columnNumber = 0; columnNumber < cellNumber; columnNumber++)
-                {
-                    pattern[rowNumber, columnNumber] = Convert.ToInt32(columns[columnNumber]);
-                }
-            }
-
-            return pattern;
         }
     }
 }

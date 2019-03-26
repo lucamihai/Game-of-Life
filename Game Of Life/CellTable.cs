@@ -14,7 +14,7 @@ namespace Game_Of_Life
         public bool SimulationRunning { get; private set; }
         public int CellNumber { get; }
         public int CellSize { get; }
-        public Cell[,] Cells { get; set; }
+        public Cell[,] Cells { get; private set; }
 
         private int _RefreshRateInMilliseconds;
         public int RefreshRateInMilliseconds
@@ -38,28 +38,6 @@ namespace Game_Of_Life
             }
         }
 
-        //public string PatternCsv
-        //{
-        //    get
-        //    {
-        //        var rows = new string[CellNumber];
-
-        //        for (int rowNumber = 0; rowNumber < CellNumber; rowNumber++)
-        //        {
-        //            var row = new int[CellNumber];
-
-        //            for (int columnNumber = 0; columnNumber < CellNumber; columnNumber++)
-        //            {
-        //                row[columnNumber] = CellAliveStatuses[rowNumber, columnNumber].Alive ? 1 : 0;
-        //            }
-
-        //            rows[rowNumber] = string.Join(Constants.PatternCsvSeparator.ToString(), row);
-        //        }
-
-        //        return string.Join(Environment.NewLine, rows);
-        //    }
-        //}
-
         public CellTable(int cellNumber)
         {
             InitializeComponent();
@@ -68,26 +46,51 @@ namespace Game_Of_Life
             CellSize = Resolution / CellNumber;
             
             InitializeCells();
-            InitializePictureBox();
-            
-            panelCells.Controls.Add(pictureBox);
-            graphics = Graphics.FromImage(pictureBox.Image);
+            InitializePictureBoxAndAddToControls();
+            InitializeTimer();
 
-            timer = new Timer();
-            timer.Tick += Timer_Tick;
+            graphics = Graphics.FromImage(pictureBox.Image);
 
             RefreshRateInMilliseconds = Constants.MinimumRefreshRateInMilliseconds;
 
             Draw();
         }
 
-        private void InitializePictureBox()
+        public CellTable(Cell[,] cells)
+        {
+            ValidateCells(cells);
+
+            CellNumber = cells.GetLength(0);
+            CellSize = Resolution / CellNumber;
+
+            InitializeComponent();
+            InitializePictureBoxAndAddToControls();
+            InitializeTimer();
+
+            graphics = Graphics.FromImage(pictureBox.Image);
+
+            Cells = cells;
+
+            RefreshRateInMilliseconds = Constants.MinimumRefreshRateInMilliseconds;
+
+            Draw();
+        }
+
+        private void InitializePictureBoxAndAddToControls()
         {
             pictureBox = new PictureBox();
             pictureBox.Size = new Size(1024, 1024);
             pictureBox.BackColor = Color.Black;
             pictureBox.Image = new Bitmap(1024, 1024);
             pictureBox.Click += PictureBoxOnClick;
+
+            panelCells.Controls.Add(pictureBox);
+        }
+
+        private void InitializeTimer()
+        {
+            timer = new Timer();
+            timer.Tick += Timer_Tick;
         }
 
         private void PictureBoxOnClick(object sender, EventArgs e)
@@ -116,26 +119,9 @@ namespace Game_Of_Life
             return result;
         }
 
-        public CellTable(int[,] pattern)
+        private void ValidateCells(Cell[,] cells)
         {
-            InitializeComponent();
-
-            ValidatePattern(pattern);
-            CellNumber = pattern.GetLength(0);
-            CellSize = Resolution / CellNumber;
-
-            InitializeCells();
-            SetCellsAliveStatusFromPattern(pattern);
-
-            timer = new Timer();
-            timer.Tick += Timer_Tick;
-
-            RefreshRateInMilliseconds = Constants.MinimumRefreshRateInMilliseconds;
-        }
-
-        private void ValidatePattern(int[,] pattern)
-        {
-            var cellNumber = Math.Sqrt(pattern.LongLength);
+            var cellNumber = Math.Sqrt(cells.LongLength);
 
             if (cellNumber < Constants.MinimumCellNumber || cellNumber > Constants.MaximumCellNumber)
             {
@@ -174,33 +160,13 @@ namespace Game_Of_Life
                     var cell = new Cell
                     {
                         Rectangle = new Rectangle(new Point(row * CellSize, column * CellSize), new Size(CellSize, CellSize)),
-                        Alive = false,
-                        BorderSize = 1
+                        Alive = false
                     };
 
                     Cells[row, column] = cell;
                     cell.Alive = false;
                 }
             }
-        }
-
-        private void SetCellsAliveStatusFromPattern(int[,] pattern)
-        {
-            //for (int row = 0; row < CellNumber; row++)
-            //{
-            //    for (int column = 0; column < CellNumber; column++)
-            //    {
-            //        if (pattern[row, column] == Constants.PatternDeadValue)
-            //        {
-            //            CellAliveStatuses[row, column].Alive = false;
-            //        }
-
-            //        if (pattern[row, column] == Constants.PatternAliveValue)
-            //        {
-            //            CellAliveStatuses[row, column].Alive = true;
-            //        }
-            //    }
-            //}
         }
 
         public void RandomizePattern()

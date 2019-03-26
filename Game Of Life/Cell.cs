@@ -6,6 +6,5 @@ namespace Game_Of_Life
     {
         public bool Alive { get; set; }
         public Rectangle Rectangle { get; set; }
-        public int BorderSize { get; set; }
     }
 }
