@@ -52,8 +52,8 @@ namespace GameOfLife
             buttonEndSimulation.Enabled = true;
             buttonRandomizePattern.Enabled = false;
             buttonSetRefreshRate.Enabled = false;
-            buttonSavePattern.Enabled = false;
-            buttonLoadPattern.Enabled = false;
+            //buttonSavePattern.Enabled = false;
+            //buttonLoadPattern.Enabled = false;
         }
 
         private void buttonEndSimulation_Click(object sender, System.EventArgs e)
@@ -65,8 +65,8 @@ namespace GameOfLife
             buttonEndSimulation.Enabled = false;
             buttonRandomizePattern.Enabled = true;
             buttonSetRefreshRate.Enabled = true;
-            buttonSavePattern.Enabled = true;
-            buttonLoadPattern.Enabled = true;
+            //buttonSavePattern.Enabled = true;
+            //buttonLoadPattern.Enabled = true;
         }
 
         private void buttonInitializeSimulation_Click(object sender, System.EventArgs e)
@@ -85,8 +85,8 @@ namespace GameOfLife
 
             buttonStartSimulation.Enabled = true;
             buttonRandomizePattern.Enabled = true;
-            buttonSetRefreshRate.Enabled = true;
-            buttonSavePattern.Enabled = true;
+            //buttonSetRefreshRate.Enabled = true;
+            //buttonSavePattern.Enabled = true;
         }
 
         private void buttonRandomizePattern_Click(object sender, System.EventArgs e)
@@ -102,29 +102,29 @@ namespace GameOfLife
 
         private void buttonSavePattern_Click(object sender, System.EventArgs e)
         {
-            var patternCsv = cellTable.PatternCsv;
-            var saveFileDialog = new SaveFileDialog
-            {
-                Title = "Browse csv file",
-                DefaultExt = "csv",
-                Filter = "csv files (*.csv) | *.csv"
-            };
+            //var patternCsv = cellTable.PatternCsv;
+            //var saveFileDialog = new SaveFileDialog
+            //{
+            //    Title = "Browse csv file",
+            //    DefaultExt = "csv",
+            //    Filter = "csv files (*.csv) | *.csv"
+            //};
 
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                if (File.Exists(saveFileDialog.FileName))
-                {
-                    return;
-                }
+            //if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            //{
+            //    if (File.Exists(saveFileDialog.FileName))
+            //    {
+            //        return;
+            //    }
 
-                var file = File.Create(saveFileDialog.FileName);
-                file.Close();
+            //    var file = File.Create(saveFileDialog.FileName);
+            //    file.Close();
 
-                using (var streamWriter = new StreamWriter(saveFileDialog.FileName))
-                {
-                    streamWriter.Write(patternCsv);
-                }
-            }
+            //    using (var streamWriter = new StreamWriter(saveFileDialog.FileName))
+            //    {
+            //        streamWriter.Write(patternCsv);
+            //    }
+            //}
         }
 
         private void buttonLoadPattern_Click(object sender, System.EventArgs e)

@@ -8,11 +8,13 @@ namespace Game_Of_Life
     {
         private Timer timer;
         private const int Resolution = 1024;
+        private PictureBox pictureBox;
+        private Graphics graphics;
 
         public bool SimulationRunning { get; private set; }
         public int CellNumber { get; }
         public int CellSize { get; }
-        public Cell[,] Cells { get; private set; }
+        public Cell[,] Cells { get; set; }
 
         private int _RefreshRateInMilliseconds;
         public int RefreshRateInMilliseconds
@@ -36,27 +38,27 @@ namespace Game_Of_Life
             }
         }
 
-        public string PatternCsv
-        {
-            get
-            {
-                var rows = new string[CellNumber];
+        //public string PatternCsv
+        //{
+        //    get
+        //    {
+        //        var rows = new string[CellNumber];
 
-                for (int rowNumber = 0; rowNumber < CellNumber; rowNumber++)
-                {
-                    var row = new int[CellNumber];
+        //        for (int rowNumber = 0; rowNumber < CellNumber; rowNumber++)
+        //        {
+        //            var row = new int[CellNumber];
 
-                    for (int columnNumber = 0; columnNumber < CellNumber; columnNumber++)
-                    {
-                        row[columnNumber] = Cells[rowNumber, columnNumber].Alive ? 1 : 0;
-                    }
+        //            for (int columnNumber = 0; columnNumber < CellNumber; columnNumber++)
+        //            {
+        //                row[columnNumber] = CellAliveStatuses[rowNumber, columnNumber].Alive ? 1 : 0;
+        //            }
 
-                    rows[rowNumber] = string.Join(Constants.PatternCsvSeparator.ToString(), row);
-                }
+        //            rows[rowNumber] = string.Join(Constants.PatternCsvSeparator.ToString(), row);
+        //        }
 
-                return string.Join(Environment.NewLine, rows);
-            }
-        }
+        //        return string.Join(Environment.NewLine, rows);
+        //    }
+        //}
 
         public CellTable(int cellNumber)
         {
@@ -66,11 +68,25 @@ namespace Game_Of_Life
             CellSize = Resolution / CellNumber;
             
             InitializeCells();
+            InitializePictureBox();
+            
+            panelCells.Controls.Add(pictureBox);
+            graphics = Graphics.FromImage(pictureBox.Image);
 
             timer = new Timer();
             timer.Tick += Timer_Tick;
 
             RefreshRateInMilliseconds = Constants.MinimumRefreshRateInMilliseconds;
+
+            Draw();
+        }
+
+        private void InitializePictureBox()
+        {
+            pictureBox = new PictureBox();
+            pictureBox.Size = new Size(1024, 1024);
+            pictureBox.BackColor = Color.Black;
+            pictureBox.Image = new Bitmap(1024, 1024);
         }
 
         public CellTable(int[,] pattern)
@@ -130,12 +146,10 @@ namespace Game_Of_Life
                 {
                     var cell = new Cell
                     {
-                        Size = new Size(CellSize, CellSize),
-                        Location = new Point(column * CellSize, row * CellSize)
+                        Rectangle = new Rectangle(new Point(column * CellSize, row * CellSize), new Size(CellSize, CellSize)),
+                        Alive = false,
+                        BorderSize = 1
                     };
-
-                    panelCells.Controls.Add(cell);
-                    cell.Click += Cell_Click;
 
                     Cells[row, column] = cell;
                     cell.Alive = false;
@@ -145,21 +159,21 @@ namespace Game_Of_Life
 
         private void SetCellsAliveStatusFromPattern(int[,] pattern)
         {
-            for (int row = 0; row < CellNumber; row++)
-            {
-                for (int column = 0; column < CellNumber; column++)
-                {
-                    if (pattern[row, column] == Constants.PatternDeadValue)
-                    {
-                        Cells[row, column].Alive = false;
-                    }
+            //for (int row = 0; row < CellNumber; row++)
+            //{
+            //    for (int column = 0; column < CellNumber; column++)
+            //    {
+            //        if (pattern[row, column] == Constants.PatternDeadValue)
+            //        {
+            //            CellAliveStatuses[row, column].Alive = false;
+            //        }
 
-                    if (pattern[row, column] == Constants.PatternAliveValue)
-                    {
-                        Cells[row, column].Alive = true;
-                    }
-                }
-            }
+            //        if (pattern[row, column] == Constants.PatternAliveValue)
+            //        {
+            //            CellAliveStatuses[row, column].Alive = true;
+            //        }
+            //    }
+            //}
         }
 
         public void RandomizePattern()
@@ -174,6 +188,8 @@ namespace Game_Of_Life
                     Cells[row, column].Alive = (value == 2);
                 }
             }
+
+            Draw();
         }
 
         public void ResetCells()
@@ -184,14 +200,6 @@ namespace Game_Of_Life
                 {
                     Cells[row, column].Alive = false;
                 }
-            }
-        }
-
-        private void Cell_Click(object sender, EventArgs e)
-        {
-            if (!SimulationRunning)
-            {
-                (sender as Cell).Alive = !(sender as Cell).Alive;
             }
         }
 
@@ -226,7 +234,28 @@ namespace Game_Of_Life
                     Cells[row, column].Alive = aliveStatuses[row, column];
                 }
             }
+
+            Draw();
         }
+
+        private void Draw()
+        {
+            var brush = new SolidBrush(Options.DeadColor);
+            for (int row = 0; row < CellNumber; row++)
+            {
+                for (int column = 0; column < CellNumber; column++)
+                {
+                    brush.Color = Cells[row, column].Alive
+                        ? Options.AliveColor
+                        : Options.DeadColor;
+
+                    graphics.FillRectangle(brush, Cells[row, column].Rectangle);
+                }
+            }
+
+            Refresh();
+        }
+
 
         private bool DetermineAliveStatusForGivenCellAt(int row, int column)
         {

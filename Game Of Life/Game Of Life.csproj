@@ -12,6 +12,8 @@
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -46,12 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cell.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Cell.Designer.cs">
-      <DependentUpon>Cell.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Cell.cs" />
     <Compile Include="CellTable.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -63,9 +60,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Cell.resx">
-      <DependentUpon>Cell.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="CellTable.resx">
       <DependentUpon>CellTable.cs</DependentUpon>
     </EmbeddedResource>
