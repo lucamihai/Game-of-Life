@@ -52,8 +52,8 @@ namespace GameOfLife
             buttonEndSimulation.Enabled = true;
             buttonRandomizePattern.Enabled = false;
             buttonSetRefreshRate.Enabled = false;
-            //buttonSavePattern.Enabled = false;
-            //buttonLoadPattern.Enabled = false;
+            buttonSavePattern.Enabled = false;
+            buttonLoadPattern.Enabled = false;
         }
 
         private void buttonEndSimulation_Click(object sender, System.EventArgs e)
@@ -65,8 +65,8 @@ namespace GameOfLife
             buttonEndSimulation.Enabled = false;
             buttonRandomizePattern.Enabled = true;
             buttonSetRefreshRate.Enabled = true;
-            //buttonSavePattern.Enabled = true;
-            //buttonLoadPattern.Enabled = true;
+            buttonSavePattern.Enabled = true;
+            buttonLoadPattern.Enabled = true;
         }
 
         private void buttonInitializeSimulation_Click(object sender, System.EventArgs e)
@@ -85,8 +85,8 @@ namespace GameOfLife
 
             buttonStartSimulation.Enabled = true;
             buttonRandomizePattern.Enabled = true;
-            //buttonSetRefreshRate.Enabled = true;
-            //buttonSavePattern.Enabled = true;
+            buttonSetRefreshRate.Enabled = true;
+            buttonSavePattern.Enabled = true;
         }
 
         private void buttonRandomizePattern_Click(object sender, System.EventArgs e)

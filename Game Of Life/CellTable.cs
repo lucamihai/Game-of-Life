@@ -87,6 +87,33 @@ namespace Game_Of_Life
             pictureBox.Size = new Size(1024, 1024);
             pictureBox.BackColor = Color.Black;
             pictureBox.Image = new Bitmap(1024, 1024);
+            pictureBox.Click += PictureBoxOnClick;
+        }
+
+        private void PictureBoxOnClick(object sender, EventArgs e)
+        {
+            if (SimulationRunning)
+            {
+                return;
+            }
+
+            var mouseEventArgs = e as MouseEventArgs;
+            var location = mouseEventArgs.Location;
+            var clickedCellIndexes = GetClickedCellIndexes(location);
+            var clickedCell = Cells[clickedCellIndexes.X, clickedCellIndexes.Y];
+
+            clickedCell.Alive = !clickedCell.Alive;
+
+            Draw();
+        }
+
+        private Point GetClickedCellIndexes(Point clickedLocation)
+        {
+            var result = new Point();
+            result.X = clickedLocation.X / CellSize;
+            result.Y = clickedLocation.Y / CellSize;
+
+            return result;
         }
 
         public CellTable(int[,] pattern)
@@ -146,7 +173,7 @@ namespace Game_Of_Life
                 {
                     var cell = new Cell
                     {
-                        Rectangle = new Rectangle(new Point(column * CellSize, row * CellSize), new Size(CellSize, CellSize)),
+                        Rectangle = new Rectangle(new Point(row * CellSize, column * CellSize), new Size(CellSize, CellSize)),
                         Alive = false,
                         BorderSize = 1
                     };
@@ -201,6 +228,8 @@ namespace Game_Of_Life
                     Cells[row, column].Alive = false;
                 }
             }
+
+            Draw();
         }
 
         public void StartSimulation()
