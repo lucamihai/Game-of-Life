@@ -1,4 +1,4 @@
-﻿namespace Game_Of_Life
+﻿namespace GameOfLife.Logic
 {
     partial class CellTable
     {

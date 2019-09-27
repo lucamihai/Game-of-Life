@@ -1,15 +1,15 @@
 ﻿using System.IO;
 using System.Windows.Forms;
-using Game_Of_Life;
+using GameOfLife.Logic;
 using Newtonsoft.Json;
 
 namespace GameOfLife
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         private CellTable cellTable;
 
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
 
@@ -25,8 +25,8 @@ namespace GameOfLife
 
         private void SetupNumericUpDownCellNumber()
         {
-            const int minimumCellNumber = Game_Of_Life.Constants.MinimumCellNumber;
-            const int maximumCellNumber = Game_Of_Life.Constants.MaximumCellNumber;
+            const int minimumCellNumber = Constants.MinimumCellNumber;
+            const int maximumCellNumber = Constants.MaximumCellNumber;
             labelCellNumber.Text = $"Cell number ({minimumCellNumber} - {maximumCellNumber})";
             numericUpDownCellNumber.Value = minimumCellNumber;
             numericUpDownCellNumber.Minimum = minimumCellNumber;
@@ -35,8 +35,8 @@ namespace GameOfLife
 
         private void SetupNumericUpDownRefreshRate()
         {
-            const int minimumRefreshRate = Game_Of_Life.Constants.MinimumRefreshRateInMilliseconds;
-            const int maximumRefreshRate = Game_Of_Life.Constants.MaximumRefreshRateInMilliseconds;
+            const int minimumRefreshRate = Constants.MinimumRefreshRateInMilliseconds;
+            const int maximumRefreshRate = Constants.MaximumRefreshRateInMilliseconds;
             labelRefreshRate.Text = $"Refresh rate in ms ({minimumRefreshRate} - {maximumRefreshRate})";
             numericUpDownRefreshRate.Value = minimumRefreshRate;
             numericUpDownRefreshRate.Minimum = minimumRefreshRate;

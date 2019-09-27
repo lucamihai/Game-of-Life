@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Game_Of_Life
+namespace GameOfLife.Logic
 {
     public partial class CellTable : UserControl
     {

@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Game Of Life")]
+[assembly: AssemblyTitle("GameOfLife.Logic")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Game Of Life")]
+[assembly: AssemblyProduct("GameOfLife.Logic")]
 [assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("940e5cb6-9924-4541-8f82-578f3ae08670")]
+[assembly: Guid("d0ae1672-b37c-4a8b-8636-c4e5526b4c94")]
 
 // Version information for an assembly consists of the following four values:
 //

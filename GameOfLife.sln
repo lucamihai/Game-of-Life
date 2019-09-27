@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.329
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29324.140
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainForm", "GameOfLife\MainForm.csproj", "{FF37E801-A2E1-4D39-8BF8-D315500C0EF2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameOfLife", "GameOfLife\GameOfLife.csproj", "{FF37E801-A2E1-4D39-8BF8-D315500C0EF2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game Of Life", "Game Of Life\Game Of Life.csproj", "{940E5CB6-9924-4541-8F82-578F3AE08670}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameOfLife.Logic", "GameOfLife.Logic\GameOfLife.Logic.csproj", "{D0AE1672-B37C-4A8B-8636-C4E5526B4C94}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{FF37E801-A2E1-4D39-8BF8-D315500C0EF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FF37E801-A2E1-4D39-8BF8-D315500C0EF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FF37E801-A2E1-4D39-8BF8-D315500C0EF2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{940E5CB6-9924-4541-8F82-578F3AE08670}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{940E5CB6-9924-4541-8F82-578F3AE08670}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{940E5CB6-9924-4541-8F82-578F3AE08670}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{940E5CB6-9924-4541-8F82-578F3AE08670}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0AE1672-B37C-4A8B-8636-C4E5526B4C94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0AE1672-B37C-4A8B-8636-C4E5526B4C94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0AE1672-B37C-4A8B-8636-C4E5526B4C94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0AE1672-B37C-4A8B-8636-C4E5526B4C94}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
