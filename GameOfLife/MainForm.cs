@@ -1,6 +1,8 @@
 ﻿using System.IO;
 using System.Windows.Forms;
+using GameOfLife.Domain.Entities;
 using GameOfLife.Logic;
+using GameOfLife.Views;
 using Newtonsoft.Json;
 
 namespace GameOfLife

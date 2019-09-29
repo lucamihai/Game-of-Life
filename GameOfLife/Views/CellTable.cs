@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using GameOfLife.Domain.Entities;
+using GameOfLife.Logic;
 
-namespace GameOfLife.Logic
+namespace GameOfLife.Views
 {
     public partial class CellTable : UserControl
     {

@@ -1,4 +1,4 @@
-﻿namespace GameOfLife.Logic
+﻿namespace GameOfLife.Views
 {
     partial class CellTable
     {

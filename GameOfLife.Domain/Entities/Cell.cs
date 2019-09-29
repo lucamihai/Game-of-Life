@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace GameOfLife.Logic
+namespace GameOfLife.Domain.Entities
 {
     public class Cell
     {
